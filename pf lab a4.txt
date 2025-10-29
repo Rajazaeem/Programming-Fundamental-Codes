@@ -1,0 +1,7 @@
+Creating a food delivery app like Uber Eats:
+1.	Requirement Analysis: Identify user needs, such as menu browsing, order tracking, and payment methods.
+2.	Design: Create a blueprint for the user interface and backend architecture.
+3.	Development: Developer write code for features like restaurant listings and real-time GPS tracking.
+4.	Testing: Test the app for bugs, ensure smooth user experience, and compatibility across devices.
+5.	Deployment: Release the app on platforms like Google Play or Apple App Store.
+6.	Maintenance: Update the app regularly to fix bugs and add new features.

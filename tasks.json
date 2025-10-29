@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build and Run Assembly (Win64)",
+            "type": "shell",
+            "command": "cmd",
+            "args": [
+                "/c",
+                "nasm -f win64 \"${file}\" -o \"${fileDirname}\\${fileBasenameNoExtension}.obj\" && C:\\msys64\\mingw64\\bin\\gcc \"${fileDirname}\\${fileBasenameNoExtension}.obj\" -o \"${fileDirname}\\${fileBasenameNoExtension}.exe\" && \"${fileDirname}\\${fileBasenameNoExtension}.exe\""
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
