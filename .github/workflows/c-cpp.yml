@@ -8,16 +8,56 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config
+
+      - name: Install autotools (only if needed)
+        if: always()
+        run: |
+          # Install autotools so we can generate configure when configure.ac exists
+          sudo apt-get install -y autoconf automake libtool && true
+
+      - name: Configure (optional / guarded)
+        run: |
+          set -e
+          # If a configure script exists and is executable, run it.
+          if [ -x ./configure ]; then
+            echo "Found executable ./configure — running"
+            ./configure
+            exit 0
+          fi
+
+          # If configure exists but not executable, make it executable and run.
+          if [ -f ./configure ]; then
+            echo "Found ./configure, making executable and running"
+            chmod +x ./configure
+            ./configure
+            exit 0
+          fi
+
+          # If autotools input files exist, generate configure and run it.
+          if [ -f configure.ac ] || [ -f configure.in ]; then
+            echo "Found autotools input (configure.ac/configure.in) — generating configure with autoreconf"
+            autoreconf -i
+            chmod +x configure
+            ./configure
+            exit 0
+          fi
+
+          # No configure needed — skip.
+          echo "No configure script or autotools inputs found — skipping configure step"
+
+      - name: Build
+        run: make -j$(nproc)
+
+      - name: Test
+        run: make check
+
+      - name: distcheck (optional)
+        run: make distcheck
